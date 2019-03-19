@@ -18,6 +18,14 @@ public class DataUtil {
         return nums;
     }
 
+    public int[] getArrays(String msg, String splitChar) {
+        String[] ss = msg.split(splitChar);
+        int[] nums = new int[ss.length];
+        for (int i = 0; i < nums.length; i++)
+            nums[i] = Integer.parseInt(ss[i]);
+        return nums;
+    }
+
     public long[] getArrays(long min, long max, int count) {
         long[] nums = new long[count];
         long a = max - min;
