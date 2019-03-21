@@ -23,14 +23,10 @@ import java.util.Arrays;
  */
 @SuppressWarnings({"SameParameterValue", "Duplicates", "WeakerAccess"})
 public class DiskSort {
-    private FileUtil util = new FileUtil();
-
     @Test
     void main() throws IOException {
         DataUtil util = new DataUtil();
         String path = "D:\\LX\\target.txt";
-        String dirPath = "D:\\LX\\tt";
-        File file = new File(path);
         int min = -100000;
         int max = 100000;
         int eachLineCount = 100;
@@ -156,6 +152,7 @@ public class DiskSort {
 
     /*单个小文件排序*/
     void aloneSort(File file) {
+        FileUtil util = new FileUtil();
         String string = util.getFileContent(file.getAbsolutePath(),true);
         String[] strings = string.split(" ");
         int[] nums = new int[strings.length];
