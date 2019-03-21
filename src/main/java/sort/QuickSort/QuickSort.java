@@ -1,4 +1,4 @@
-package sort.quickSort;
+package sort.QuickSort;
 
 import org.junit.jupiter.api.Test;
 import utils.DataUtil;

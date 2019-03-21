@@ -1,4 +1,4 @@
-package sort.mergeSort;
+package sort.MergeSort;
 
 import org.junit.jupiter.api.Test;
 import utils.DataUtil;
