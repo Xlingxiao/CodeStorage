@@ -45,8 +45,10 @@ public class DiskSort {
         if (!dir.mkdir()) System.out.println(String.format("文件夹已存在:%s", dirPath));
         long length = file.length();
         int fileNum;
-        if (length > 1024 * 1024 * 100) {
-            fileNum = 2000;
+        if (length > 1024 * 1024 * 1024) {
+            fileNum = 1000;
+        } else if (length > 1024 * 1024 * 100) {
+            fileNum = 100;
         } else if (length > 1024 * 1024 * 10) {
             fileNum = 10;
         } else {

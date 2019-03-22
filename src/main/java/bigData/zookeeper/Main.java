@@ -1,138 +1,67 @@
 package bigData.zookeeper;
 
 import org.apache.zookeeper.*;
-import org.apache.zookeeper.Watcher.Event.KeeperState;
-import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Stat;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
-import java.util.logging.Logger;
+import java.util.concurrent.TimeUnit;
 
 /**
- * 测试Zookeeper提供的Java Api
+ * @Author: Administrator
+ * @Date: 2019/3/21 22:42
+ * @Version: 1.0
  */
-@SuppressWarnings("WeakerAccess")
 public class Main {
+    //测试分布式锁，开十个线程，分别去抢锁，然后打印消息
+    @Test
+    void main() throws InterruptedException {
+        int len = 10;
+        final CountDownLatch latch = new CountDownLatch(len);
+        for (int i = 0; i < len; i++) {
+            new Thread(new Runnable() {
+                public void run() {
+                    Lock myLock = new Lock();
 
-    private ZooKeeper zoo;
-    private static final Logger logger = Logger.getLogger("Zookeeper");
-    private static CountDownLatch connectedSemaphore = new CountDownLatch(1);
-
-    /*获得zookeeper连接对象*/
-    void initZoo() throws IOException {
-        Properties pro = new Properties();
-        InputStream is = this.getClass().getClassLoader().getResourceAsStream("zookeeper/zoo.properties");
-        pro.load(is);
-        zoo = new ZooKeeper(pro.getProperty("hostPort"),
-                Integer.parseInt(pro.getProperty("sessionTimeOut")), new myWatcher());
+                    myLock.getLock();
+                    System.out.println(String.format("%s 获得锁啦", Thread.currentThread().getName()));
+                    System.out.println("做自己的事");
+                    try {
+                        TimeUnit.MILLISECONDS.sleep(1000);
+                        System.out.println("事情做完啦");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    latch.countDown();
+                    myLock.release();
+                }
+            }).start();
+        }
+        latch.await();
+        System.out.println("所有事都做完了");
     }
+
 
     @Test
-    void main() throws IOException, InterruptedException {
-        initZoo();
-        System.out.println(zoo.getState());
-        connectedSemaphore.await();
-        String path = "/JavaTest";
-        String data = "Hello World";
-        createNode(path, data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
-        System.out.println(getZNodeContent(path));
-        setNode(path, "HELLO");
-        System.out.println(getZNodeContent(path));
-        deleteNode(path);
-        System.out.println(getZNodeContent(path));
-    }
-
-    /*节点是否存在*/
-    public Stat exists(String path) throws KeeperException, InterruptedException {
-        return zoo.exists(path, false);
-    }
-
-    /*创建节点*/
-    public void createNode(String path, String data, List<ACL> acl, CreateMode createMode) {
-        String returnPath = null;
+    void test(){
+        String path = "/tmp/node";
+        CountDownLatch latch = new CountDownLatch(1);
         try {
-            returnPath = zoo.create(path, data.getBytes(), acl, createMode);
-        } catch (KeeperException e) {
-            System.out.println(String.format("创建节点失败：%s", path));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        logger.info(String.format("创建节点成功：%s，data:%s", returnPath, data));
-    }
+            ZooKeeper zookeeper = new ZooKeeper("172.16.2.107:2182", 3000, new MyWatcher(latch));
+            zookeeper.create(path, "0".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
+            zookeeper.create(path, "0".getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
+            latch = new CountDownLatch(1);
+            List<String> list = zookeeper.getChildren("/tmp", false);
+            System.out.println(list);
+            Stat stat = zookeeper.exists(path, new MyWatcher(latch));
 
-    /*获得节点内容*/
-    public String getZNodeContent(String path) {
-        String msg = null;
-        try {
-            msg = new String(zoo.getData(path, false, exists(path)));
-        } catch (KeeperException e) {
-            System.out.println("没有找到节点");
-        } catch (InterruptedException e) {
+            if (stat != null)
+                latch.await();
+            System.out.println("获取锁");
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return msg;
-    }
 
-    /*更新节点值*/
-    public String setNode(String path, String data) {
-        Stat stat  = null;
-        try {
-            stat = exists(path);
-        } catch (KeeperException e) {
-            System.out.println("没有找到节点，无法设置值");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        if(stat == null)return null;
-        try {
-            int v = stat.getVersion();
-            zoo.setData(path, data.getBytes(), v);
-            System.out.println("更新成功");
-            return getZNodeContent(path);
-        } catch (KeeperException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return getZNodeContent(path);
     }
-
-    /*删除节点*/
-    public String deleteNode(String path) {
-        Stat stat = null;
-        try {
-            stat = exists(path);
-        } catch (KeeperException e) {
-            System.out.println("没有找到节点，无法删除");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        if (stat == null) return null;
-        String msg = getZNodeContent(path);
-        try {
-            zoo.delete(path, stat.getVersion());
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (KeeperException e) {
-            e.printStackTrace();
-        }
-        System.out.println(String.format("删除成功：%s", path));
-        return path;
-    }
-
-    /*创建一个Watcher对某个节点进行监控*/
-    private class myWatcher implements Watcher{
-        public void process(WatchedEvent watchedEvent) {
-            System.out.println("Receive watched event : " + watchedEvent);
-            if (KeeperState.SyncConnected == watchedEvent.getState()) {
-                connectedSemaphore.countDown();
-            }
-        }
-    }
-
 }
