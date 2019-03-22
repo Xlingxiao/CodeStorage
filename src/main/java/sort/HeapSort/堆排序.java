@@ -1,4 +1,4 @@
-package sort.Heapsort;
+package sort.HeapSort;
 
 import org.junit.jupiter.api.Test;
 import utils.DataUtil;

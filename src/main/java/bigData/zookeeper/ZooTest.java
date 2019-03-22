@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  * 测试Zookeeper提供的Java Api
  */
 @SuppressWarnings("WeakerAccess")
-public class ZooUtil {
+public class ZooTest {
 
     private ZooKeeper zoo;
     private static final Logger logger = Logger.getLogger("Zookeeper");
