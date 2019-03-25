@@ -1,4 +1,4 @@
-package bigData.zookeeper;
+package BigData.Zookeeper;
 
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;

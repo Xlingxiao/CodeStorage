@@ -1,4 +1,4 @@
-package bigData.zookeeper;
+package BigData.Zookeeper;
 
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
