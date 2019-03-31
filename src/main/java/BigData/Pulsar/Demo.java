@@ -103,6 +103,7 @@ public class Demo {
             byte[] data = message.getData();
             Pojo pojo = pojoSchema.decode(data);
             System.out.println(pojo);
+            consumer.acknowledge(message);
         }
     }
 }

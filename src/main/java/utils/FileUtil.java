@@ -50,14 +50,12 @@ public class FileUtil {
     /*将String写出到磁盘*/
     public void writeString(String data, String path) {
         File file = new File(path);
-        data = data.replaceAll("\\s+", "\n");
+//        data = data.replaceAll("\\s+", "\n");
         try {
             BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
             bos.write(data.getBytes());
             bos.flush();
             bos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
