@@ -39,7 +39,7 @@ public class MyConsumer {
         CountDownLatch latch = new CountDownLatch(num);
         for (int i = 0; i < num; i++) {
             Consumer<byte[]> consumer = util.getConsumer(
-                    String.format("%s-partition-%d", properties.getProperty("topic"), i));
+                    String.format("%s-partition-%d", properties.getProperty("topic"), i),"JavaTest");
             new Thread(new MyWorker(consumer)).start();
         }
         latch.await();
