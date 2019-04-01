@@ -7,17 +7,17 @@ import java.io.*;
  * @Date: 2019/3/21 13:12
  * @Version: 1.0
  */
-@SuppressWarnings({"WeakerAccess", "unused", "ConstantConditions"})
+@SuppressWarnings({"unused", "ConstantConditions"})
 public class FileUtil {
 
     /*获得文件内容消除换行，是否消除换行*/
-    public String getFileContent(String path,boolean cleanLineCode) {
+    public String getFileContent(String path, boolean cleanLineCode) {
         StringBuilder sb = new StringBuilder();
         File file = new File(path);
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
             String tmp;
-            if(cleanLineCode)
+            if (cleanLineCode)
                 while ((tmp = br.readLine()) != null) {
                     sb.append(tmp);
                 }
@@ -67,5 +67,10 @@ public class FileUtil {
         for (int num : nums)
             sb.append(num).append("\n");
         writeString(sb.toString(), path);
+    }
+
+    /*获得相对路径的文件输入流*/
+    public InputStream getRelativePath(String relativePath) {
+        return this.getClass().getClassLoader().getResourceAsStream(relativePath);
     }
 }

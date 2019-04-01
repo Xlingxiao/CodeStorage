@@ -1,24 +1,22 @@
 package BigData.Pulsar;
 
 import org.apache.pulsar.client.api.*;
-import org.apache.pulsar.client.impl.conf.ReaderConfigurationData;
 import org.apache.pulsar.client.impl.schema.JSONSchema;
 import org.apache.pulsar.client.internal.DefaultImplementation;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: LX
  * @Date: 2019/3/25 13:02
  * @Version: 1.0
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
 public class Demo {
+
     @Test
-    void main() throws PulsarClientException {
+    void producer() throws PulsarClientException {
         // 准备Pulsar的服务url地址
         String localClusterUrl = "pulsar://172.16.2.107:6650";
         // 创建Pulsar客户端
@@ -30,7 +28,8 @@ public class Demo {
                 .sendTimeout(10, TimeUnit.SECONDS)
                 .blockIfQueueFull(true)
                 .create();*/
-         Producer<String> producer = client.newProducer(Schema.STRING).topic("my-topic").create();
+//         Producer<String> producer = client.newProducer(Schema.STRING).topic("my-topic").create();
+         Producer<String> producer = client.newProducer(Schema.STRING).topic("persistent://public/default/test").create();
         // 调用send()方法发送消息
         producer.send("Hello Java Pulsar");
         producer.send("Hello Java Client");
@@ -49,15 +48,14 @@ public class Demo {
         // producer.close();
         producer.closeAsync().thenRun(() -> System.out.println("Producer closed"));
         // 发送pojo对象
-        Producer<Pojo> producer2 = client.newProducer(JSONSchema.of(Pojo.class))
+        /*Producer<Pojo> producer2 = client.newProducer(JSONSchema.of(Pojo.class))
                 .topic("pojo-topic")
                 .create();
         producer2.send(new Pojo("1", 15, "lx"));
-        producer2.close();
+        producer2.close();*/
         // 关闭Pulsar客户端
-        producer.close();
+        client.close();
     }
-
 
     @Test
     void consumer() throws IOException {
@@ -66,7 +64,8 @@ public class Demo {
         // 创建Pulsar客户端
         PulsarClient client = PulsarClient.builder().serviceUrl(Url).build();
         // 使用Pulsar客户端创建生产者
-        Consumer<byte[]> consumer = client.newConsumer().topic("my-topic")
+        //Consumer<byte[]> consumer = client.newConsumer().topic("my-topic")
+        Consumer<byte[]> consumer = client.newConsumer().topic("persistent://public/default/test")
                 .subscriptionName("my-subscription").subscribe();
         //从指定的message开始消费
         MessageId id = DefaultImplementation.newMessageId(2, 2, 2);
