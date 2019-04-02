@@ -1,10 +1,7 @@
 package utils;
 
 import org.apache.pulsar.client.admin.PulsarAdmin;
-import org.apache.pulsar.client.api.Consumer;
-import org.apache.pulsar.client.api.Producer;
-import org.apache.pulsar.client.api.PulsarClient;
-import org.apache.pulsar.client.api.PulsarClientException;
+import org.apache.pulsar.client.api.*;
 import org.apache.pulsar.client.impl.conf.ClientConfigurationData;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +13,7 @@ import java.util.Properties;
  * @Date: 2019/4/1 19:01
  * @Version: 1.0
  */
-@SuppressWarnings({"UnnecessaryLocalVariable", "WeakerAccess", "unused"})
+@SuppressWarnings({"UnnecessaryLocalVariable", "unused"})
 public class PulsarUtil {
 
     private PulsarClient client;
@@ -81,9 +78,5 @@ public class PulsarUtil {
         return admin;
     }
 
-    @Test
-    void main() throws PulsarClientException {
-        System.out.println();
-    }
 
 }

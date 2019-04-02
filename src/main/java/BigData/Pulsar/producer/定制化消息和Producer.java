@@ -1,9 +1,6 @@
 package BigData.Pulsar.producer;
 
-import org.apache.pulsar.client.api.MessageRoutingMode;
-import org.apache.pulsar.client.api.Producer;
-import org.apache.pulsar.client.api.PulsarClient;
-import org.apache.pulsar.client.api.PulsarClientException;
+import org.apache.pulsar.client.api.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.TimeUnit;
@@ -17,6 +14,17 @@ import java.util.concurrent.TimeUnit;
 @SuppressWarnings("NonAsciiCharacters")
 class 定制化消息和Producer {
 
+    /**
+     * producer定制消息主要是定制Message对象，主要的是key-value对
+     * producer主要可以配置路由信息：
+     * 路由机制由两个参数组成：
+     * 1. messageRouter 自定义路由，新建MessageRouter()方法要求实现choosePartition()
+     * 方法，这个方法的入参为Message，TopicMetadata，message中包含消息的各种元数据信息，
+     * topicMetadata中有topic的分区数量，使用两个对象可以自定义自己的路由机制，
+     * 返回的int数据即为数据将要发送到的partition位置
+     * 2. messageRoutingMode 使用系统内自带的三种路由模式
+     * @throws PulsarClientException Pulsar的相关错误
+     */
     @Test
     void main() throws PulsarClientException {
         // 准备Pulsar的服务url地址
@@ -28,6 +36,12 @@ class 定制化消息和Producer {
                 .batchingMaxPublishDelay(20, TimeUnit.MILLISECONDS)
                 .sendTimeout(10, TimeUnit.SECONDS)
                 .blockIfQueueFull(true)
+                /*.messageRouter(new MessageRouter() {
+                    @Override
+                    public int choosePartition(Message<?> msg, TopicMetadata metadata) {
+                        return 0;
+                    }
+                })*/
                 .messageRoutingMode(MessageRoutingMode.RoundRobinPartition)
                 .create();
         // 对发送的消息进行配置
