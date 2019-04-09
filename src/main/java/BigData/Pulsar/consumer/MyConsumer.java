@@ -1,11 +1,10 @@
 package BigData.Pulsar.consumer;
 
-import org.apache.pulsar.client.admin.PulsarAdmin;
+import BigData.Pulsar.admin.LXAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.api.Consumer;
 import org.apache.pulsar.client.api.Message;
 import org.apache.pulsar.client.api.PulsarClientException;
-import org.apache.pulsar.common.partition.PartitionedTopicMetadata;
 import org.junit.jupiter.api.Test;
 import utils.PropertiesUtil;
 import utils.PulsarUtil;
@@ -19,22 +18,29 @@ import java.util.Scanner;
  * @Date: 2019/4/1 19:59
  * @Version: 1.0
  */
+@SuppressWarnings("FieldCanBeLocal")
 class MyConsumer {
 
     private PulsarUtil util = new PulsarUtil();
     private PropertiesUtil propertiesUtil = new PropertiesUtil();
+    private Properties properties;
+    private LXAdmin admin;
 
     @Test
     void main() throws IOException, PulsarAdminException {
-        Properties properties = propertiesUtil.getProperties("pulsar/pulsar.properties");
-        PulsarAdmin admin = util.getAdmin();
-        String url = properties.getProperty("topic");
-        PartitionedTopicMetadata p = admin.topics().getPartitionedTopicMetadata(url);
-        int num = p.partitions;
+        properties = propertiesUtil.getProperties("pulsar/pulsar.properties");
+        admin = new LXAdmin(properties);
+
+        String rowTopic = properties.getProperty("topic");
+        String subName = properties.getProperty("subName");
+        String rowConsumerName = properties.getProperty("consumerName");
+        int num = admin.getPartitionsCount(rowTopic);
 
         for (int i = 0; i < num; i++) {
             Consumer<byte[]> consumer = util.getConsumer(
-                    String.format("%s-partition-%d", properties.getProperty("topic"), i),"JavaTest");
+                    String.format("%s-partition-%d", rowTopic, i),
+                    subName,
+                    String.format("%s_%d", rowConsumerName, i));
             new Thread(new MyWorker(consumer)).start();
         }
         Scanner sc = new Scanner(System.in);
