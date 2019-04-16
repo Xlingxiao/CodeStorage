@@ -17,7 +17,7 @@ import java.util.Properties;
  * @Date: 2019/4/9 13:40
  * @Version: 1.0
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "Duplicates"})
 public class LXAdmin {
     private PulsarAdmin admin;
     private Properties properties;

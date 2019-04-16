@@ -3,6 +3,7 @@ package BigData.Pulsar.producer;
 import BigData.Pulsar.admin.LXAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.api.Producer;
+import org.apache.pulsar.client.api.TypedMessageBuilder;
 import org.junit.jupiter.api.Test;
 import utils.PropertiesUtil;
 import utils.PulsarUtil;

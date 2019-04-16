@@ -1,4 +1,4 @@
-package BigData.Zookeeper;
+package utils;
 
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.Watcher.Event.KeeperState;
@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
@@ -16,12 +17,16 @@ import java.util.logging.Logger;
 /**
  * 测试Zookeeper提供的Java Api
  */
-@SuppressWarnings("ALL")
-public class ZooTest {
+@SuppressWarnings({"WeakerAccess", "Duplicates"})
+public class ZKUtil {
 
     private ZooKeeper zoo;
     private static final Logger logger = Logger.getLogger("Zookeeper");
     private static CountDownLatch connectedSemaphore = new CountDownLatch(1);
+
+    public ZKUtil() throws IOException {
+        initZoo();
+    }
 
     /*获得zookeeper连接对象*/
     void initZoo() throws IOException {
@@ -78,6 +83,11 @@ public class ZooTest {
         return msg;
     }
 
+    /*获得节点的所有子节点*/
+    public List<String> getChildren(String path) throws KeeperException, InterruptedException {
+        return zoo.getChildren(path, false);
+    }
+
     /*更新节点值*/
     public String setNode(String path, String data) {
         Stat stat  = null;
@@ -128,7 +138,7 @@ public class ZooTest {
     /*创建一个Watcher对某个节点进行监控*/
     private class myWatcher implements Watcher{
         public void process(WatchedEvent watchedEvent) {
-            System.out.println("Receive watched event : " + watchedEvent);
+//            System.out.println("Receive watched event : " + watchedEvent);
             if (KeeperState.SyncConnected == watchedEvent.getState()) {
                 connectedSemaphore.countDown();
             }

@@ -6,7 +6,6 @@ package design_patten.singleton;
  * @Version: 1.0
  */
 public class _5静态内部类 {
-    private Pojo pojo;
 
     public Pojo getPojo() {
         return Inner.pojo;
