@@ -10,9 +10,18 @@ import java.util.Properties;
  * @Date: 2019/4/1 19:29
  * @Version: 1.0
  */
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class PropertiesUtil {
 
-    private static final FileUtil util = new FileUtil();
+    private FileUtil util;
+
+    public PropertiesUtil() {
+        util = new FileUtil();
+    }
+
+    public PropertiesUtil(FileUtil fileUtil) {
+        this.util = fileUtil;
+    }
 
     /*根据相对路径获得properties文件*/
     public Properties getProperties(String relativePath) throws IOException {

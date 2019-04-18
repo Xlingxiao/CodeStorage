@@ -7,7 +7,7 @@ import java.io.*;
  * @Date: 2019/3/21 13:12
  * @Version: 1.0
  */
-@SuppressWarnings({"unused", "ConstantConditions"})
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class FileUtil {
 
     /*获得文件内容消除换行，是否消除换行*/
@@ -37,12 +37,12 @@ public class FileUtil {
     /*获得文件夹下所有文件内容*/
     public String getDirAllFileContent(String dir) {
         File dirFile = new File(dir);
-        int len = dirFile.listFiles().length;
+        File[] files = dirFile.listFiles();
+        if (files == null) return null;
         StringBuilder sb = new StringBuilder();
-        File tmpFile;
-        for (int i = 0; i < len; i++) {
-            tmpFile = new File(String.format("%s\\%d.txt", dir, i));
-            sb.append(getFileContent(tmpFile.getAbsolutePath(), false));
+        for (File file : files) {
+            if(file.isDirectory()) continue;
+            sb.append(getFileContent(file.getAbsolutePath(), false));
         }
         return sb.toString();
     }

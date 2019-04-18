@@ -13,24 +13,31 @@ import java.util.Properties;
  * @Date: 2019/4/1 19:01
  * @Version: 1.0
  */
-@SuppressWarnings({"UnnecessaryLocalVariable", "unused", "Duplicates"})
+@SuppressWarnings({"UnnecessaryLocalVariable", "unused", "Duplicates", "WeakerAccess"})
 public class PulsarUtil {
 
     private PulsarClient client;
-    private static final PropertiesUtil propUtil = new PropertiesUtil();
-    private Properties prop;
+    private PropertiesUtil propUtil;
+    private static Properties prop;
 
     /*初始化Pulsar Client 以及 Pulsar LXAdmin*/
-    public PulsarUtil() {
-        try {
-            prop = propUtil.getProperties("pulsar/pulsar.properties");
-            // 准备Pulsar的服务url地址
-            String localClusterUrl = prop.getProperty("brokerUrl");
-            // 创建Pulsar客户端
-            client = PulsarClient.builder().serviceUrl(localClusterUrl).build();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public PulsarUtil() throws IOException {
+        propUtil = new PropertiesUtil();
+        init();
+    }
+
+    public PulsarUtil(PropertiesUtil propertiesUtil) throws IOException {
+        this.propUtil = propertiesUtil;
+        init();
+    }
+
+    private void init() throws IOException {
+        prop = propUtil.getProperties("pulsar/pulsar.properties");
+        // 准备Pulsar的服务url地址
+        String localClusterUrl = prop.getProperty("brokerUrl");
+        // 创建Pulsar客户端
+        client = PulsarClient.builder().serviceUrl(localClusterUrl).build();
+
     }
 
     /*获得consumer，byte数组类型*/

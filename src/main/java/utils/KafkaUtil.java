@@ -1,14 +1,11 @@
 package utils;
 
 
-import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.zookeeper.KeeperException;
 import org.junit.jupiter.api.Test;
-import utils.PropertiesUtil;
-import utils.ZKUtil;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -18,13 +15,13 @@ import java.util.Properties;
  * @Date: 2019/4/16 9:49
  * @Version: 1.0
  */
-@SuppressWarnings({"unused", "WeakerAccess", "FieldCanBeLocal"})
+@SuppressWarnings({"unused", "FieldCanBeLocal"})
 public class KafkaUtil {
 
     private static final String producerPropPath = "kafka/producer.properties";
     private static final String consumerPropPath = "kafka/consumer.properties";
-    private static PropertiesUtil propertiesUtil = new PropertiesUtil();
     private static String zooPath = "/brokers/topics";
+    private static PropertiesUtil propertiesUtil;
     private static Properties consumerProperties;
     private static Properties producerProperties;
     private static ZKUtil zkUtil;
@@ -32,6 +29,14 @@ public class KafkaUtil {
     /*初始化时要加载consumer/producer的配置文件*/
     public KafkaUtil() throws IOException {
         zkUtil = new ZKUtil();
+        propertiesUtil = new PropertiesUtil();
+        consumerProperties = propertiesUtil.getProperties(consumerPropPath);
+        producerProperties = propertiesUtil.getProperties(producerPropPath);
+    }
+
+    public KafkaUtil(ZKUtil zk_util, PropertiesUtil prop_util) throws IOException {
+        zkUtil = zk_util;
+        propertiesUtil = prop_util;
         consumerProperties = propertiesUtil.getProperties(consumerPropPath);
         producerProperties = propertiesUtil.getProperties(producerPropPath);
     }

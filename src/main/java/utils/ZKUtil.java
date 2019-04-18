@@ -7,8 +7,6 @@ import org.apache.zookeeper.data.Stat;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
@@ -23,22 +21,28 @@ public class ZKUtil {
     private ZooKeeper zoo;
     private static final Logger logger = Logger.getLogger("Zookeeper");
     private static CountDownLatch connectedSemaphore = new CountDownLatch(1);
+    private static PropertiesUtil propertiesUtil;
 
     public ZKUtil() throws IOException {
+        propertiesUtil = new PropertiesUtil();
+        initZoo();
+    }
+
+    public ZKUtil(PropertiesUtil util) throws IOException {
+        propertiesUtil = util;
         initZoo();
     }
 
     /*获得zookeeper连接对象*/
     void initZoo() throws IOException {
-        Properties pro = new Properties();
-        InputStream is = this.getClass().getClassLoader().getResourceAsStream("zookeeper/zoo.properties");
-        pro.load(is);
+        Properties pro = propertiesUtil.getProperties("zookeeper/zoo.properties");
         zoo = new ZooKeeper(pro.getProperty("hostPort"),
                 Integer.parseInt(pro.getProperty("sessionTimeOut")), new myWatcher());
     }
 
     @Test
     void main() throws IOException, InterruptedException {
+        propertiesUtil = new PropertiesUtil();
         initZoo();
         System.out.println(zoo.getState());
         connectedSemaphore.await();
