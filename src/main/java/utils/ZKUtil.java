@@ -22,6 +22,7 @@ public class ZKUtil {
     private static final Logger logger = Logger.getLogger("Zookeeper");
     private static CountDownLatch connectedSemaphore = new CountDownLatch(1);
     private static PropertiesUtil propertiesUtil;
+    private String zkServerAddr;
 
     public ZKUtil() throws IOException {
         propertiesUtil = new PropertiesUtil();
@@ -36,7 +37,8 @@ public class ZKUtil {
     /*获得zookeeper连接对象*/
     void initZoo() throws IOException {
         Properties pro = propertiesUtil.getProperties("zookeeper/zoo.properties");
-        zoo = new ZooKeeper(pro.getProperty("hostPort"),
+        zkServerAddr = pro.getProperty("zkServerAddr");
+        zoo = new ZooKeeper(pro.getProperty("zkServerAddr"),
                 Integer.parseInt(pro.getProperty("sessionTimeOut")), new myWatcher());
     }
 
@@ -54,6 +56,10 @@ public class ZKUtil {
         System.out.println(getZNodeContent(path));
         deleteNode(path);
         System.out.println(getZNodeContent(path));
+    }
+
+    public String getZkServerAddr(){
+        return zkServerAddr;
     }
 
     /*节点是否存在*/

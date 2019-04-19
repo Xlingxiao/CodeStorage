@@ -20,22 +20,20 @@ public class Main {
         int len = 10;
         final CountDownLatch latch = new CountDownLatch(len);
         for (int i = 0; i < len; i++) {
-            new Thread(new Runnable() {
-                public void run() {
-                    Lock myLock = new Lock();
+            new Thread(() -> {
+                Lock myLock = new Lock();
 
-                    myLock.getLock();
-                    System.out.println(String.format("%s 获得锁啦", Thread.currentThread().getName()));
-                    System.out.println("做自己的事");
-                    try {
-                        TimeUnit.MILLISECONDS.sleep(1000);
-                        System.out.println("事情做完啦");
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    latch.countDown();
-                    myLock.release();
+                myLock.getLock();
+                System.out.println(String.format("%s 获得锁啦", Thread.currentThread().getName()));
+                System.out.println("做自己的事");
+                try {
+                    TimeUnit.MILLISECONDS.sleep(1000);
+                    System.out.println("事情做完啦");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                latch.countDown();
+                myLock.release();
             }).start();
         }
         latch.await();

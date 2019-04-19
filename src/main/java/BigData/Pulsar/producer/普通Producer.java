@@ -17,7 +17,7 @@ public class 普通Producer {
         // 创建Pulsar客户端
         PulsarClient client = PulsarClient.builder().serviceUrl(localClusterUrl).build();
         // 使用Pulsar客户端创建生产者
-         Producer<byte[]> producer = client.newProducer().topic("my-topic").create();
+         Producer<byte[]> producer = client.newProducer().topic("persistent://lx/java/log").create();
         // 调用send()方法发送消息 同步
         producer.send("Hello Java Client".getBytes());
         // 异步

@@ -74,6 +74,12 @@ public class FileUtil {
         return this.getClass().getClassLoader().getResourceAsStream(relativePath);
     }
 
+    /*获得相对路径的文件输入缓冲*/
+    public BufferedReader getRelativeBuffer(String relativePath) {
+        InputStream is = getRelativePath(relativePath);
+        return new BufferedReader(new InputStreamReader(is));
+    }
+
     /*获得相对路径文件内容*/
     public String getRelativeContent(String relativePath) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(getRelativePath(relativePath)));

@@ -3,11 +3,9 @@ package BigData.Pulsar.admin;
 import org.apache.pulsar.client.admin.PulsarAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.api.MessageId;
-import org.apache.pulsar.client.api.PulsarClientException;
 import org.apache.pulsar.client.impl.conf.ClientConfigurationData;
 import org.junit.jupiter.api.Test;
 import utils.PropertiesUtil;
-import utils.PulsarUtil;
 
 import java.io.IOException;
 import java.util.Properties;

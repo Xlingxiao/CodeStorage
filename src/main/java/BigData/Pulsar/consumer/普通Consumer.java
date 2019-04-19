@@ -21,8 +21,9 @@ class 普通Consumer {
         PulsarClient client = PulsarClient.builder().serviceUrl(Url).build();
         // 使用Pulsar客户端创建生产者
         // 每个subscriptionName相当于一个消费分组，一个分组只能对一条数据消费一次
-        Consumer<byte[]> consumer = client.newConsumer().topic("my-topic")
+        Consumer<byte[]> consumer = client.newConsumer().topic("persistent://lx/java/log")
                 .subscriptionName("subscriptionName").subscribe();
+        System.out.println(consumer.getTopic());
         while (true) {
             // 获得消息
              Message msg = consumer.receive();

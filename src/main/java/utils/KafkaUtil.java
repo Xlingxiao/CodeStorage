@@ -26,10 +26,17 @@ public class KafkaUtil {
     private static Properties producerProperties;
     private static ZKUtil zkUtil;
 
+    public static void main(String[] args) throws IOException, KeeperException, InterruptedException {
+        String topic = "sniTopic";
+        KafkaUtil kafkaUtil = new KafkaUtil();
+        int num = kafkaUtil.getPartitionsNum(topic);
+        System.out.println(String.format("zkServer: %s\nTopic: %s\nPartitions: %d\n", zkUtil.getZkServerAddr(), topic, num));
+    }
+
     /*初始化时要加载consumer/producer的配置文件*/
     public KafkaUtil() throws IOException {
-        zkUtil = new ZKUtil();
         propertiesUtil = new PropertiesUtil();
+        zkUtil = new ZKUtil(propertiesUtil);
         consumerProperties = propertiesUtil.getProperties(consumerPropPath);
         producerProperties = propertiesUtil.getProperties(producerPropPath);
     }
@@ -39,15 +46,6 @@ public class KafkaUtil {
         propertiesUtil = prop_util;
         consumerProperties = propertiesUtil.getProperties(consumerPropPath);
         producerProperties = propertiesUtil.getProperties(producerPropPath);
-    }
-
-    @Test
-    void main() throws KeeperException, InterruptedException {
-        String path = "/brokers/topics";
-        String topic = "lxTopic";
-        String partition = "partitions";
-        int num = getPartitionsNum(String.format("%s/%s/%s", path, topic, partition));
-        System.out.println(String.format("Topic: %s Partitions: %d", path, num));
     }
 
     /*获得topic下的分区数量*/
