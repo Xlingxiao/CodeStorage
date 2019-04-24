@@ -11,6 +11,7 @@ import utils.PulsarUtil;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author: LX
@@ -29,9 +30,9 @@ class MyProducer {
         util = new PulsarUtil();
         properties = propertiesUtil.getProperties("pulsar/pulsar.properties");
         LXAdmin admin = new LXAdmin(properties);
-        topic = properties.getProperty("logTopic");
+        topic = properties.getProperty("topic");
         Producer<byte[]> producer = util.getProducer(topic);
-        FileUtil fileUtil = new FileUtil();
+        /*FileUtil fileUtil = new FileUtil();
         String dataLogPath = "pulsarBroker.log";
         BufferedReader br = fileUtil.getRelativeBuffer(dataLogPath);
         String tmp;
@@ -39,8 +40,8 @@ class MyProducer {
             producer.newMessage()
                     .value(tmp.getBytes())
                     .send();
-        }
-        /*int partitionCount = admin.getPartitionsCount(topic);
+        }*/
+        int partitionCount = admin.getPartitionsCount(topic);
         int count = admin.countTopicMessage(topic, partitionCount);
         for (int i = count; i < Integer.MAX_VALUE; i++) {
             String msg = String.format("message_%d", i);
@@ -48,9 +49,9 @@ class MyProducer {
                     .key(i + "")
                     .value(msg.getBytes())
                     .send();
-            if (i % 100 == 0) System.out.println(msg);
+            if (i % 10 == 0) System.out.println(msg);
             TimeUnit.SECONDS.sleep(1);
-        }*/
+        }
     }
 
 }

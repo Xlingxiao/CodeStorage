@@ -1,5 +1,7 @@
 package utils;
 
+import org.junit.jupiter.api.Test;
+
 import java.io.*;
 
 /**
@@ -85,6 +87,24 @@ public class FileUtil {
         BufferedReader br = new BufferedReader(new InputStreamReader(getRelativePath(relativePath)));
         StringBuilder sb = new StringBuilder();
         String tmp;
+        while ((tmp = br.readLine()) != null) {
+            sb.append(tmp).append("\n");
+        }
+        return sb.toString();
+    }
+
+
+    @Test
+    void test() throws IOException {
+        System.out.println(getFileContentGBK("html"));
+    }
+
+    /*解码*/
+    public String getFileContentGBK(String path) throws IOException {
+        InputStream is = getRelativePath(path);
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        String tmp;
+        StringBuilder sb = new StringBuilder();
         while ((tmp = br.readLine()) != null) {
             sb.append(tmp).append("\n");
         }

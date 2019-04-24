@@ -56,6 +56,7 @@ class MyConsumer {
         sc.nextLine();
     }
 
+    @SuppressWarnings("Duplicates")
     class MyWorker implements Runnable {
         Consumer<byte[]> consumer;
         MyWorker(Consumer<byte[]> consumer) {
@@ -65,11 +66,11 @@ class MyConsumer {
         @SuppressWarnings("InfiniteLoopStatement")
         @Override
         public void run() {
-            try {
+            /*try {
                 consumer.seek(MessageId.earliest);
             } catch (PulsarClientException e) {
                 e.printStackTrace();
-            }
+            }*/
             String name = Thread.currentThread().getName() + " ";
             System.out.println(String.format("%s已经启动,消费%s的数据",
                     name,consumer.getTopic()));

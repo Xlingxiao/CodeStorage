@@ -28,7 +28,7 @@ class 普通Consumer {
             // 获得消息
              Message msg = consumer.receive();
             //消费消息
-            System.out.println(new String(msg.getData()));
+            System.out.println(String.format("%s\t%s",msg.getKey(),new String(msg.getData())));
             //发送commit到pulsar服务
             consumer.acknowledge(msg);
         }

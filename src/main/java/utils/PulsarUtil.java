@@ -37,11 +37,15 @@ public class PulsarUtil {
         String localClusterUrl = prop.getProperty("brokerUrl");
         // 创建Pulsar客户端
         client = PulsarClient.builder().serviceUrl(localClusterUrl).build();
+    }
 
+    /*获得client*/
+    public PulsarClient getClient() {
+        return client;
     }
 
     /*获得consumer，byte数组类型*/
-    public Consumer<byte[]> getConsumer(String topic,String subName,String consumerName) throws PulsarClientException {
+    public Consumer<byte[]> getConsumer(String topic, String subName, String consumerName) throws PulsarClientException {
         Consumer<byte[]> consumer = client.newConsumer()
                 .topic(topic)
                 .subscriptionName(subName)
@@ -51,8 +55,8 @@ public class PulsarUtil {
     }
 
     /*不指定topic使用配置文件中的testTopic，获得consumer，byte数组类型*/
-    public Consumer<byte[]> getConsumer(String subName,String consumerName) throws PulsarClientException {
-        return getConsumer(prop.getProperty("testTopic"), subName,consumerName);
+    public Consumer<byte[]> getConsumer(String subName, String consumerName) throws PulsarClientException {
+        return getConsumer(prop.getProperty("testTopic"), subName, consumerName);
     }
 
     /*获得producer，byte[]型*/
