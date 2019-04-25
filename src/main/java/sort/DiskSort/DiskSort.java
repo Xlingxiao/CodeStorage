@@ -1,7 +1,7 @@
 package sort.DiskSort;
 
 import org.junit.jupiter.api.Test;
-import utils.DataUtil;
+import factory.DataFactory;
 import utils.FileUtil;
 
 import java.io.*;
@@ -25,7 +25,7 @@ import java.util.Arrays;
 public class DiskSort {
     @Test
     void main() throws IOException {
-        DataUtil util = new DataUtil();
+        DataFactory util = new DataFactory();
         String path = "D:\\LX\\target.txt";
         int min = -100000;
         int max = 100000;

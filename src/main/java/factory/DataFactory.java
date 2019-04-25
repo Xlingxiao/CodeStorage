@@ -1,4 +1,4 @@
-package utils;
+package factory;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.*;
 
 @SuppressWarnings("unused")
-public class DataUtil {
+public class DataFactory {
 
     /**
      * @param min 生成的最小值

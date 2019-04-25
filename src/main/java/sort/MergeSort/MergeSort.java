@@ -1,13 +1,13 @@
 package sort.MergeSort;
 
 import org.junit.jupiter.api.Test;
-import utils.DataUtil;
+import factory.DataFactory;
 
 
 public class MergeSort {
     @Test
     void Main() {
-        DataUtil util = new DataUtil();
+        DataFactory util = new DataFactory();
         int min = -10;
         int max = 20;
         int count = 10;

@@ -1,4 +1,4 @@
-package BigData.Pulsar.consumer.dataDistribution;
+package dataDistribution.consummer;
 
 import org.apache.pulsar.client.api.*;
 import utils.PropertiesUtil;
@@ -39,7 +39,7 @@ class LowerApp {
         /*获得topic 消费者组名*/
         String subName = properties.getProperty("subName");
         /*多个topic放在multiTopic中使用,分隔。*/
-        String topics = properties.getProperty("multiTopic");
+        String topics = properties.getProperty("consumerMultiTopic");
         List<String> topicList = Arrays.asList(topics.split(","));
         PulsarClient pulsarClient = util.getClient();
         ConsumerBuilder consumerBuilder = pulsarClient.newConsumer().subscriptionName(subName);

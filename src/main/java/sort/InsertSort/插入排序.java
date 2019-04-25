@@ -1,12 +1,12 @@
 package sort.InsertSort;
 
 import org.junit.jupiter.api.Test;
-import utils.DataUtil;
+import factory.DataFactory;
 
 public class 插入排序 {
     @Test
     void main() {
-        DataUtil util = new DataUtil();
+        DataFactory util = new DataFactory();
         int[] nums = util.getArrays(0, 20, 10);
         util.display(nums);
         util.display(insertSort(nums));

@@ -1,13 +1,13 @@
 package sort.HeapSort;
 
 import org.junit.jupiter.api.Test;
-import utils.DataUtil;
+import factory.DataFactory;
 
 @SuppressWarnings({"NonAsciiCharacters", "WeakerAccess"})
 public class 堆排序 {
     @Test
     void main() {
-        DataUtil util = new DataUtil();
+        DataFactory util = new DataFactory();
         int[] nums = util.getArrays("16 -5 0 2 5 2 11 16 1 18", " ");
 //        int[] nums = util.getArrays(-10,20,10);
         util.display(nums);

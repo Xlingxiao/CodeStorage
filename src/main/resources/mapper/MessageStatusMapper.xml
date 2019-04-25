@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--suppress SqlDialectInspection, SqlNoDataSourceInspection -->
+<mapper namespace="dataDistribution.mybatis.mapper.MessageStatusMapper" >
+
+    <resultMap id="BaseResultMap" type="dataDistribution.mybatis.pojo.MyMessage" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="content" property="content" jdbcType="LONGVARCHAR" />
+        <result column="status" property="status" jdbcType="CHAR" />
+        <result column="topic" property="topic" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List" >
+        id, content, status, topic
+    </sql>
+
+
+    <!--====================================个人补充==========================================-->
+
+    <!--获得所有message-->
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from `message-status`
+    </select>
+
+    <!--分页获得message-->
+    <select id="selectOnePage" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List" />
+        from `message-status`
+        LIMIT #{startIndex,jdbcType=BIGINT},#{endIndex,jdbcType=BIGINT}
+    </select>
+
+    <!--根据message状态获取message-->
+    <select id="getByStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from `message-status`
+        where status = #{status}
+        LIMIT #{size};
+    </select>
+
+    <!--根据时间段获取message-->
+    <select id="getMsgsByIdRange" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from `message-status`
+        where id between #{startPosition,jdbcType=BIGINT} and #{endPosition,jdbcType=BIGINT}
+        LIMIT #{size};
+    </select>
+
+    <!--根据topic获取message-->
+    <select id="getMsgsByTopic" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from `message-status`
+        where topic = #{topic,jdbcType=BIGINT}
+        LIMIT #{size};
+    </select>
+
+    <!--根据topic和状态获取message-->
+    <select id="getMsgByTopicAndStatus" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from `message-status`
+        where topic = #{topic,jdbcType=BIGINT} and status = #{status}
+        LIMIT #{size};
+    </select>
+
+    <!--============================自带==================================-->
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        from `message-status`
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from `message-status`
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="insert" parameterType="dataDistribution.mybatis.pojo.MyMessage" >
+        insert into `message-status` (id, content, status,topic)
+        values (#{id}, #{content}, #{status},#{topic})
+    </insert>
+
+    <insert id="insertSelective" parameterType="dataDistribution.mybatis.pojo.MyMessage" >
+        insert into `message-status`
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="content != null" >
+                content,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="topic != null" >
+                topic,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="content != null" >
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="status != null" >
+                #{status,jdbcType=CHAR},
+            </if>
+            <if test="topic != null" >
+                #{topic,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="dataDistribution.mybatis.pojo.MyMessage" >
+        update `message-status`
+        <set >
+            <if test="content != null" >
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="status != null" >
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="dataDistribution.mybatis.pojo.MyMessage" >
+        update `message-status`
+        set content = #{content,jdbcType=LONGVARCHAR},
+            status = #{status,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

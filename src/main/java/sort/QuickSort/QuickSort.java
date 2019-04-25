@@ -1,7 +1,7 @@
 package sort.QuickSort;
 
 import org.junit.jupiter.api.Test;
-import utils.DataUtil;
+import factory.DataFactory;
 
 public class QuickSort {
     @Test
@@ -9,7 +9,7 @@ public class QuickSort {
         int min = -10;
         int max = 20;
         int count = 10;
-        DataUtil util = new DataUtil();
+        DataFactory util = new DataFactory();
         int[] nums = util.getArrays(min, max, count);
         display(nums);
         quickSort(nums);

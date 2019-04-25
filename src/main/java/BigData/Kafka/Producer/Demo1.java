@@ -51,7 +51,7 @@ public class Demo1 {
     /*测试发送一轮数据 num指定发送次数*/
     private long testOneProducer(Producer<String, String> producer, String topic, int num) throws IOException, InterruptedException {
         CountDownLatch latch = new CountDownLatch(num);
-        String rowData = getData("data.txt");
+        String rowData = getData("data/data.txt");
         Callback callback = (recordMetadata, e) -> {
             latch.countDown();
             //System.out.println("success");
@@ -68,7 +68,7 @@ public class Demo1 {
 
     private long testMultiProducer(String topic, int msgNum, int producerNum) throws IOException, InterruptedException {
         CountDownLatch latch = new CountDownLatch(producerNum);
-        String rowData = getData("data.txt");
+        String rowData = getData("data/data.txt");
         int oneProducerMission = msgNum / producerNum;
         long start = System.currentTimeMillis();
         for (int i = 0; i < producerNum; i++) {
