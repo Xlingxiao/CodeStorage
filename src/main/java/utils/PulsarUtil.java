@@ -17,6 +17,7 @@ import java.util.Properties;
 public class PulsarUtil {
 
     private PulsarClient client;
+    private PulsarClient tlsClient;
     private PropertiesUtil propUtil;
     private static Properties prop;
 
@@ -39,15 +40,46 @@ public class PulsarUtil {
     }
 
     private void init() throws IOException {
-        // 准备Pulsar的服务url地址
-        String localClusterUrl = prop.getProperty("brokerUrl");
         // 创建Pulsar客户端
-        client = PulsarClient.builder().serviceUrl(localClusterUrl).build();
+        client = getTlsAndTokenClient(prop.getProperty("trustTlsCertFile"), prop.getProperty("adminToken"));
     }
 
     /*获得client*/
     public PulsarClient getClient() {
         return client;
+    }
+
+    /*获得tls加密client*/
+    public PulsarClient getTlsClient(String tlsCertificatePath) throws PulsarClientException {
+        if (tlsClient == null) {
+            synchronized (this) {
+                if (tlsClient == null) {
+                    String Url = prop.getProperty("tlsBrokerUrl");
+                    tlsClient = PulsarClient.builder()
+                            .serviceUrl(Url)
+                            .tlsTrustCertsFilePath(tlsCertificatePath)
+                            .allowTlsInsecureConnection(false).build();
+                }
+            }
+        }
+        return tlsClient;
+    }
+
+    /*获得tls加密client并用授权token*/
+    public PulsarClient getTlsAndTokenClient(String tlsCertificatePath, String token) throws PulsarClientException {
+        if (tlsClient == null) {
+            synchronized (this) {
+                if (tlsClient == null) {
+                    String Url = prop.getProperty("tlsBrokerUrl");
+                    tlsClient = PulsarClient.builder()
+                            .serviceUrl(Url)
+                            .tlsTrustCertsFilePath(tlsCertificatePath)
+                            .authentication(AuthenticationFactory.token(token))
+                            .allowTlsInsecureConnection(false).build();
+                }
+            }
+        }
+        return tlsClient;
     }
 
     /*获得consumer，byte数组类型*/
@@ -88,7 +120,7 @@ public class PulsarUtil {
         config.setUseTls(false);
         config.setTlsAllowInsecureConnection(false);
         config.setTlsTrustCertsFilePath(null);
-        admin = new PulsarAdmin(prop.getProperty("adminUrl"), config);
+        admin = new PulsarAdmin(prop.getProperty("restUrl"), config);
     }
 
     /*展示Message ID*/

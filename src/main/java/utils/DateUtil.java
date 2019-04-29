@@ -1,5 +1,6 @@
 package utils;
 
+import factory.DataFactory;
 import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
@@ -41,5 +42,9 @@ public class DateUtil {
             if(dates.length == 3) return sdfSecond.parse(dateStr);
         }
         return sdfDay.parse(dateStr);
+    }
+
+    public String dateToString(long time) {
+        return sdfSecond.format(new Date(time));
     }
 }
