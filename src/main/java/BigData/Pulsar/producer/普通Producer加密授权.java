@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class 普通Producer加密授权 {
     public static void main(String[] args) throws IOException, InterruptedException, PulsarAdminException {
         // 准备Pulsar的服务url地址
-        String Url = "pulsar+ssl://172.16.2.107:6651/";
+        String Url = "pulsar+ssl://172.16.2.107:6653/";
         // 创建Pulsar客户端
         //tls授权使用
         /*Map<String, String> map = new HashMap<>();
@@ -28,9 +28,9 @@ public class 普通Producer加密授权 {
                 .serviceUrl(Url)
                 .tlsTrustCertsFilePath("F:\\lx\\Code\\CodeStorage\\src\\main\\resources\\pulsar\\ca.cert.pem")
                 //.authentication("org.apache.pulsar.client.impl.auth.AuthenticationTls", map)
-                .authentication(AuthenticationFactory.token("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiJ9.fy-zG1gGL_pIWzEMCBupgQWOmUlN4guNrCibPO-h9JE"))
+                .authentication(AuthenticationFactory.token("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0VXNlciJ9.LLCKf-xeVOMe4DwiGdDruJFSVrmS4IvdtYdi0CcIn2w"))
                 .allowTlsInsecureConnection(false).build();
-        String topic = "persistent://public/log/topicLog";
+        String topic = "persistent://zx/test/test1";
         int count = 0;
         /*下面几句测试时非必需*/
         /*PropertiesUtil propertiesUtil = new PropertiesUtil();

@@ -27,11 +27,11 @@ public class 普通消费者加密授权 {
                 .serviceUrl(Url)
                 .tlsTrustCertsFilePath("F:\\lx\\Code\\CodeStorage\\src\\main\\resources\\pulsar\\ca.cert.pem")
                 //.authentication("org.apache.pulsar.client.impl.auth.AuthenticationTls", map)
-                .authentication(AuthenticationFactory.token("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiJ9.fy-zG1gGL_pIWzEMCBupgQWOmUlN4guNrCibPO-h9JE"))
+                .authentication(AuthenticationFactory.token("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0VXNlciJ9.LLCKf-xeVOMe4DwiGdDruJFSVrmS4IvdtYdi0CcIn2w"))
                 .allowTlsInsecureConnection(false).build();
         // 使用Pulsar客户端创建生产者
         // 每个subscriptionName相当于一个消费分组，一个分组只能对一条数据消费一次
-        Consumer<byte[]> consumer = client.newConsumer().topic("persistent://lx/java/test")
+        Consumer<byte[]> consumer = client.newConsumer().topic("persistent://zx/test/test1")
                 .subscriptionName("subscriptionName").subscribe();
 //        consumer.seek(MessageId.earliest);
 

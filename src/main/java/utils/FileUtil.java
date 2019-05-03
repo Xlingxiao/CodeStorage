@@ -110,4 +110,16 @@ public class FileUtil {
         }
         return sb.toString();
     }
+
+    /*相对文件路径获得字节数组*/
+    public byte[] getFileContent(String relativePath) throws IOException {
+        InputStream is = getRelativePath(relativePath);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        byte[] bytes = new byte[10];
+        int len;
+        while ((len = is.read(bytes)) != -1) {
+            bos.write(bytes, 0, len);
+        }
+        return bos.toByteArray();
+    }
 }
