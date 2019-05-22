@@ -28,8 +28,8 @@ class 订阅多个topic {
     void main() throws IOException {
         /*读取pulsar的配置文件*/
         PulsarUtil util = new PulsarUtil(propertiesUtil);
+        LXAdmin admin = new LXAdmin(propertiesUtil);
         Properties properties = propertiesUtil.getProperties("pulsar/pulsar.properties");
-        LXAdmin admin = new LXAdmin(properties);
         /*获得topic 消费者组id 消费者组名*/
         String subName = properties.getProperty("subName");
         PulsarClient pulsarClient = util.getClient();

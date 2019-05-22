@@ -29,7 +29,7 @@ class MyProducer {
     void main() throws IOException, InterruptedException, PulsarAdminException {
         util = new PulsarUtil();
         properties = propertiesUtil.getProperties("pulsar/pulsar.properties");
-        LXAdmin admin = new LXAdmin(properties);
+        LXAdmin admin = new LXAdmin(propertiesUtil);
         topic = properties.getProperty("topic");
         Producer<byte[]> producer = util.getProducer(topic);
         /*FileUtil fileUtil = new FileUtil();
@@ -41,9 +41,8 @@ class MyProducer {
                     .value(tmp.getBytes())
                     .send();
         }*/
-        int partitionCount = admin.getPartitionsCount(topic);
-        int count = admin.countTopicMessage(topic, partitionCount);
-        for (int i = count; i < Integer.MAX_VALUE; i++) {
+        long count = admin.countTopicMessage(topic);
+        for (long i = count; i < Integer.MAX_VALUE; i++) {
             String msg = String.format("message_%d", i);
             producer.newMessage()
                     .key(i + "")

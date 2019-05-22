@@ -4,8 +4,6 @@ import org.apache.pulsar.client.api.*;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @Author: LX
@@ -27,13 +25,13 @@ public class 普通消费者加密授权 {
                 .serviceUrl(Url)
                 .tlsTrustCertsFilePath("F:\\lx\\Code\\CodeStorage\\src\\main\\resources\\pulsar\\ca.cert.pem")
                 //.authentication("org.apache.pulsar.client.impl.auth.AuthenticationTls", map)
-                .authentication(AuthenticationFactory.token("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0VXNlciJ9.LLCKf-xeVOMe4DwiGdDruJFSVrmS4IvdtYdi0CcIn2w"))
+                .authentication(AuthenticationFactory.token("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MyJ9.wGFd0RslYqT4IKAFAq-1FXcFlSM0VEvK109GpZBXzOY"))
                 .allowTlsInsecureConnection(false).build();
         // 使用Pulsar客户端创建生产者
         // 每个subscriptionName相当于一个消费分组，一个分组只能对一条数据消费一次
-        Consumer<byte[]> consumer = client.newConsumer().topic("persistent://zx/test/test1")
-                .subscriptionName("subscriptionName").subscribe();
-//        consumer.seek(MessageId.earliest);
+        Consumer<byte[]> consumer = client.newConsumer().topic("persistent://tenant3/nm1/topic1-partition-0")
+                .subscriptionName("subscriptionName_2").subscribe();
+        consumer.seek(MessageId.earliest);
 
         System.out.println(consumer.getTopic());
         while (true) {

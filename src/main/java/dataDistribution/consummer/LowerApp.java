@@ -41,46 +41,19 @@ class LowerApp {
 
         /*多个topic放在multiTopic中使用,分隔。*/
         String topics = properties.getProperty("consumerMultiTopic");
-        List<String> topicList = Arrays.asList(topics.split(","));
-        PulsarClient pulsarClient = util.getClient();
-        ConsumerBuilder consumerBuilder = pulsarClient.newConsumer().subscriptionName(subName);
+        String[] topicList = topics.split(",");
 
-        /*通过列表订阅*/
-        //noinspection unchecked
-        Consumer<Byte[]> allTopicsConsumer = consumerBuilder.topics(topicList).subscribe();
-        String consumerName = allTopicsConsumer.getConsumerName();
+        /*获取是否需要从头消费*/
+        boolean fromEarliest = Boolean.parseBoolean(properties.getProperty("fromEarliest"));
 
-
-        //noinspection InfiniteLoopStatement
-        for (; ; ) {
-            Message msg = allTopicsConsumer.receive();
-            //消费
-            consume(msg);
-            //构建BackLog
-            String backlog = String.format("Time:%s " +
-                            "Topic:%s " + "Message ID:%s " +
-                            "SubscriptionName:%s " + "ConsumerName:%s %s",
-                    dateUtil.dateToString(System.currentTimeMillis()),
-                    msg.getTopicName(),msg.getKey(), subName,
-                    consumerName, "配置生效");
-
-            // 使用生产者将messageId发送到log topic中
-            System.out.println(backlog);
-            backLog(msg.getKey(), backlog);
-
-            //返回ack
-            allTopicsConsumer.acknowledge(msg);
+        /*根据订阅的topic进行开线程*/
+        for (String s : topicList) {
+            String consumerName = String.format("%s_%s", subName, s);
+            Consumer<byte[]> consumer = util.getConsumer(s, subName, consumerName);
+            if(fromEarliest)
+                consumer.seek(MessageId.earliest);
+            ConsumerService consumerService = new ConsumerService(dateUtil, consumer, producer);
+            new Thread(consumerService).start();
         }
-    }
-
-    /*模拟消费*/
-    private void consume(Message msg) {
-        System.out.println(String.format("%s消费了%s", msg.getTopicName(), new String(msg.getData())));
-    }
-
-    private void backLog(String msgId, String logContent) {
-        producer.newMessage().key(String.valueOf(msgId))
-                .value(logContent.getBytes())
-                .sendAsync();
     }
 }

@@ -3,6 +3,8 @@ package utils;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author: Administrator
@@ -93,10 +95,22 @@ public class FileUtil {
         return sb.toString();
     }
 
+    /*根据文件夹路径判断文件夹是否已创建，并对为创建的文件夹进行创建*/
+    public void createFilePath(String filePath) {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            System.out.println("file no exit");
+            file.mkdirs();
+        }
+    }
+
 
     @Test
     void test() throws IOException {
-        System.out.println(getFileContentGBK("html"));
+        Map<String, Integer> map = new HashMap<>();
+        map.put("aa", 3);
+        Integer a = map.get("cc");
+        System.out.println(a);
     }
 
     /*解码*/

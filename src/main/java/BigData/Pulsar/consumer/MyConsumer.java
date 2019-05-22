@@ -4,7 +4,6 @@ import BigData.Pulsar.admin.LXAdmin;
 import org.apache.pulsar.client.admin.PulsarAdminException;
 import org.apache.pulsar.client.api.Consumer;
 import org.apache.pulsar.client.api.Message;
-import org.apache.pulsar.client.api.MessageId;
 import org.apache.pulsar.client.api.PulsarClientException;
 import org.junit.jupiter.api.Test;
 import utils.PropertiesUtil;
@@ -32,7 +31,7 @@ class MyConsumer {
         /*读取pulsar的配置文件*/
         util = new PulsarUtil(propertiesUtil);
         properties = propertiesUtil.getProperties("pulsar/pulsar.properties");
-        admin = new LXAdmin(properties);
+        admin = new LXAdmin(propertiesUtil);
 
         /*获得topic 消费者组id 消费者组名*/
         String rowTopic = properties.getProperty("topic");

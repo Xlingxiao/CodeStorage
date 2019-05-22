@@ -2,15 +2,12 @@ package dataDistribution.producer;
 
 
 import dataDistribution.mybatis.mapper.MessageStatusMapper;
-import dataDistribution.mybatis.pojo.MyMessage;
+import dataDistribution.mybatis.pojo.MessageStatus;
 import org.apache.pulsar.client.api.Producer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import utils.PropertiesUtil;
 import utils.PulsarUtil;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -45,10 +42,12 @@ public class PulsarService implements Runnable {
         int size = 1000;
         while (true) {
             try {
-                List<MyMessage> myMessages = msgMapper.getMsgByTopicAndStatus(topic, "配置下发", size);
-                for (MyMessage myMessage : myMessages) {
+                List<MessageStatus> myMessages = msgMapper.getByTopicAndStatus(topic, "配置下发", size);
+                for (MessageStatus myMessage : myMessages) {
                     System.out.println(String.format("%s处理了：%s", name, myMessage.getContent()));
                     myMessage.setStatus("配置传输");
+                    myMessage.setModifyTime(new Date(System.currentTimeMillis()));
+                    //发送到pulsar
                     sendMessage(String.valueOf(myMessage.getId()), myMessage.getContent());
                     msgMapper.updateByPrimaryKey(myMessage);
                 }

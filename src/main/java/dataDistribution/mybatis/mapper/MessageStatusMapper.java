@@ -1,38 +1,43 @@
 package dataDistribution.mybatis.mapper;
 
-import org.apache.ibatis.annotations.Param;
-import dataDistribution.mybatis.pojo.MyMessage;
+
+import dataDistribution.mybatis.pojo.MessageStatus;
 
 import java.util.List;
 
-
-/**
- * @Author: LX
- * @Date: 2019/4/25 14:08
- * @Version: 1.0
- */
+@SuppressWarnings({"unused", "UnusedReturnValue"})
 public interface MessageStatusMapper {
-    List<MyMessage> selectAll();
 
-    List<MyMessage> selectOnePage(@Param("startIndex") int startIndex, @Param("endIndex") int endIndex);
+    /*根据用户名获得用户角色*/
+    List<String> selectRoleByUser(String userName);
 
-    List<MyMessage> getByStatus(@Param("status") String status, @Param("size") int size);
+    List<MessageStatus> selectAll();
 
-    List<MyMessage> getMsgsByIdRange(@Param("startPosition") long startPosition, @Param("endPosition") long endPosition, @Param("size") int size);
+    List<MessageStatus> selectOnePage(int startIndex, int size);
 
-    List<MyMessage> getMsgByTopic(@Param("topic") String topic, @Param("size") int size);
+    List<MessageStatus> selectOnePageByUser(int startIndex, int size, String userName);
 
-    List<MyMessage> getMsgByTopicAndStatus(@Param("topic") String topic, @Param("status") String status, @Param("size") int size);
+    List<MessageStatus> getByStatus(String status, int size);
 
-    MyMessage selectByPrimaryKey(Long id);
+    List<MessageStatus> getByTopicAndStatus(String topic, String status, int size);
+
+    List<MessageStatus> getMsgsByIdRange(long startPosition, long endPosition, int size);
+
+    List<MessageStatus> getMsgByTopic(String topic, int size);
+
+    MessageStatus selectByPrimaryKey(Long id);
 
     int deleteByPrimaryKey(Long id);
 
-    int insert(MyMessage record);
+    int insert(MessageStatus record);
 
-    int insertSelective(MyMessage record);
+    int insertSelective(MessageStatus record);
 
-    int updateByPrimaryKeySelective(MyMessage record);
+    int updateByPrimaryKeySelective(MessageStatus record);
 
-    void updateByPrimaryKey(MyMessage record);
+    int updateByPrimaryKey(MessageStatus record);
+
+    long getMessageTotal();
+
+    long getMessageTotalByUser(String userName);
 }

@@ -28,9 +28,9 @@ public class 普通Producer加密授权 {
                 .serviceUrl(Url)
                 .tlsTrustCertsFilePath("F:\\lx\\Code\\CodeStorage\\src\\main\\resources\\pulsar\\ca.cert.pem")
                 //.authentication("org.apache.pulsar.client.impl.auth.AuthenticationTls", map)
-                .authentication(AuthenticationFactory.token("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0VXNlciJ9.LLCKf-xeVOMe4DwiGdDruJFSVrmS4IvdtYdi0CcIn2w"))
+                .authentication(AuthenticationFactory.token("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MyJ9.wGFd0RslYqT4IKAFAq-1FXcFlSM0VEvK109GpZBXzOY"))
                 .allowTlsInsecureConnection(false).build();
-        String topic = "persistent://zx/test/test1";
+        String topic = "persistent://public/log/topicLog";
         int count = 0;
         /*下面几句测试时非必需*/
         /*PropertiesUtil propertiesUtil = new PropertiesUtil();
@@ -49,7 +49,7 @@ public class 普通Producer加密授权 {
             System.out.println(msg);
             producer.send(msg.getBytes());
             producer.flush();
-            TimeUnit.SECONDS.sleep(1);
+            TimeUnit.MILLISECONDS.sleep(1000);
         }
 
         // 异步
