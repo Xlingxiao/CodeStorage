@@ -34,7 +34,7 @@ public class Main {
         KeyPair keyPair = Keys.keyPairFor(signatureAlgorithm);*/
 
         String jws = Jwts.builder().setSubject("admin").signWith(key).compact();
-        String yuit = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MiJ9._zRyaeZq1CyMWS4ewWJXvLvGZRqsC4pWVRQuC5erO-c";
+        String yuit = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MyJ9.wGFd0RslYqT4IKAFAq-1FXcFlSM0VEvK109GpZBXzOY";
         System.out.println(jws);
         System.out.println(yuit);
 

@@ -26,7 +26,7 @@ public class StartProducer {
 
     private static Properties pulsarProperties;
 
-    public StartProducer() throws IOException {
+    private StartProducer() throws IOException {
     }
 
     public static void main(String[] args) throws IOException, PulsarAdminException, InterruptedException {
@@ -38,6 +38,8 @@ public class StartProducer {
         start.processAllTopic(messageStatusMapper);
 
     }
+
+    /*=======================一个线程一个producer========================*/
 
     /*处理配置文件中的topic*/
     private void processProperties(MessageStatusMapper messageStatusMapper) throws IOException {
@@ -55,39 +57,84 @@ public class StartProducer {
         return row.split(",");
     }
 
+
+    /*==========================将producer放到map中，根据topic选择producer=========================*/
     private LXAdmin pulsarAdmin = getAdmin();
     private PulsarUtil util = new PulsarUtil();
-    private Map<String, Producer<byte[]>> producerMap = new HashMap<>();
+    private Map<String, Producer<byte[]>> producerMap;
+    //保存topic没有找到producer的次数
+    private Map<String, Long> notFountTimes;
+    //topic未找到多少次刷新producerMap
+    private long timesLine;
+    //读取什么状态的数据
+    private String loadStatus;
+    //将数据处理后数据状态改为什么
+    private String uploadStatus;
+    //每次从数据库中取多少数据
+    private int getDataBaseSize;
+    //每隔多少秒从数据库获取数据
+    private int getDataBaseInterval;
+
+    /*初始化所有参数*/
+    private void init() throws IOException, PulsarAdminException {
+        pulsarAdmin = getAdmin();
+        util = new PulsarUtil();
+        producerMap = new HashMap<>();
+        getAllProduce();
+        notFountTimes = new HashMap<>();
+        pulsarProperties = new PropertiesUtil().getProperties("pulsar/pulsar.properties");
+        timesLine = Long.parseLong(pulsarProperties.getProperty("producerNotFoundReload"));
+        loadStatus = pulsarProperties.getProperty("producerLoadStatus");
+        uploadStatus = pulsarProperties.getProperty("producerUploadStatus");
+        getDataBaseSize = Integer.parseInt(pulsarProperties.getProperty("getDataBaseSize"));
+        getDataBaseInterval = Integer.parseInt(pulsarProperties.getProperty("getDataBaseInterval"));
+    }
+
 
     /*处理所有topic中发送消息*/
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"InfiniteLoopStatement", "unchecked"})
     private void processAllTopic(MessageStatusMapper messageMapper) throws IOException, PulsarAdminException, InterruptedException {
-        int size = 1000;
-        Map<String, Producer<byte[]>> producerMap = getAllProduce();
+        init();
         while (true) {
             //从数据获取消息
-            List<MessageStatus> myMessages = messageMapper.getByStatus("配置下发", size);
+            List<MessageStatus> myMessages = messageMapper.getByStatus(loadStatus, getDataBaseSize);
             for (MessageStatus myMessage : myMessages) {
                 //获得topic并根据topic获取对应的producer
                 String topic = myMessage.getTopic();
                 Producer producer = producerMap.get(topic);
-                //producer为空重新获取一遍producer
+                //producer为空获取producer为空的次数
                 if (producer == null) {
-                    producerMap = getAllProduce();
-                    producer = producerMap.get(topic);
+                    producer = notFoundProducerProcess(topic, timesLine);
                     if(producer == null) continue;
                 }
                 //将数据发送到pulsar
                 producer.newMessage().key(String.valueOf(myMessage.getId())).value(myMessage.getContent().getBytes()).sendAsync();
                 //将状态向数据库进行更新
-                myMessage.setStatus("配置传输");
+                myMessage.setStatus(uploadStatus);
                 myMessage.setModifyTime(new Date(System.currentTimeMillis()));
                 messageMapper.updateByPrimaryKey(myMessage);
                 System.out.println(String.format("处理了：%s", myMessage.getContent()));
             }
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.SECONDS.sleep(getDataBaseInterval);
         }
 
+    }
+
+    /*没有找到producer之后的处理*/
+    private Producer notFoundProducerProcess(String topic,long timesLine) throws IOException, PulsarAdminException {
+        Producer producer = null;
+        //putIfAbsent 存在key则相当于get key不存在相当于put
+        Long times = notFountTimes.putIfAbsent(topic, (long) 1);
+        if (times != null) {
+            if (times < timesLine) {
+                notFountTimes.put(topic, times + 1);
+            }else {
+                producerMap = getAllProduce();
+                producer = producerMap.get(topic);
+                notFountTimes.put(topic, (long) 0);
+            }
+        }
+        return producer;
     }
 
     /*获取producer的map*/
@@ -101,7 +148,7 @@ public class StartProducer {
                 if (producer == null) {
                     producer = util.getProducer(topic);
                     producerMap.put(topic, producer);
-                    System.out.println(String.format("处理：【%s】的数据", topic));
+                    System.out.println(String.format("处理：[%s]的数据", topic));
                 }
             }
         }

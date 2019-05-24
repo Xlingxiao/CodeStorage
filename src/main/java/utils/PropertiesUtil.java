@@ -27,7 +27,7 @@ public class PropertiesUtil {
     /*根据相对路径获得properties文件*/
     public Properties getProperties(String relativePath) throws IOException {
         Properties prop = new Properties();
-        prop.load(util.getRelativePath(relativePath));
+        prop.load(util.getRelativeBuffer(relativePath));
         return prop;
     }
 

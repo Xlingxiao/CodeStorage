@@ -43,8 +43,10 @@ public class PulsarUtil {
     }
 
     private void init() throws IOException {
-        // 创建Pulsar客户端
-        client = getTlsAndTokenClient(prop.getProperty("trustTlsCertFile"), prop.getProperty("adminToken"));
+        // 创建Pulsar客户端.
+        String token = prop.getProperty("adminToken");
+        if (token == null) token = prop.getProperty("userToken");
+        client = getTlsAndTokenClient(prop.getProperty("trustTlsCertFile"), token);
     }
 
     /*获得client*/
