@@ -28,7 +28,6 @@
 
     <dependencies>
 
-
         <!--Json-->
         <dependency>
             <groupId>org.json</groupId>
@@ -48,12 +47,12 @@
             <version>0.10.5</version>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
             <version>0.10.5</version>
             <scope>runtime</scope>
-        </dependency>
+        </dependency>-->
 
         <!--Spring-->
         <dependency>
@@ -133,7 +132,7 @@
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
-            <version>3.4.6</version>
+            <version>3.4.14</version>
         </dependency>
         <!--Pulsar-->
         <dependency>
@@ -146,16 +145,24 @@
             <artifactId>pulsar-client-admin</artifactId>
             <version>2.3.1</version>
         </dependency>
+
         <!--Spark-->
-        <dependency> <!-- Spark dependency -->
+        <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_2.12</artifactId>
             <version>2.4.0</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.12</artifactId>
             <version>2.4.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thoughtworks.paranamer</groupId>
+            <artifactId>paranamer</artifactId>
+            <version>2.8</version>
         </dependency>
 
         <!--Kafka-->

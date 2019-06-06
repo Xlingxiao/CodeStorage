@@ -81,8 +81,6 @@ public class Main {
         String user = "admin";
         String token = getTokenByUser(user);
         System.out.println(token);
-
-
     }
 
 }
