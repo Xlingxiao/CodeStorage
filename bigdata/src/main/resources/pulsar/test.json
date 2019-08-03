@@ -1,0 +1,146 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "leaf": true,
+                "title": "persistent://lx/java/testN1-partition-0",
+                "value": "persistent://lx/java/testN1-partition-0",
+                "key": "persistent://lx/java/testN1-partition-0"
+              },
+              {
+                "leaf": true,
+                "title": "persistent://lx/java/testN1-partition-1",
+                "value": "persistent://lx/java/testN1-partition-1",
+                "key": "persistent://lx/java/testN1-partition-1"
+              },
+              {
+                "leaf": true,
+                "title": "persistent://lx/java/testN1-partition-2",
+                "value": "persistent://lx/java/testN1-partition-2",
+                "key": "persistent://lx/java/testN1-partition-2"
+              },
+              {
+                "leaf": true,
+                "title": "persistent://lx/java/testN1-partition-3",
+                "value": "persistent://lx/java/testN1-partition-3",
+                "key": "persistent://lx/java/testN1-partition-3"
+              },
+              {
+                "leaf": true,
+                "title": "persistent://lx/java/testN1-partition-4",
+                "value": "persistent://lx/java/testN1-partition-4",
+                "key": "persistent://lx/java/testN1-partition-4"
+              }
+            ],
+            "admin": {
+              "public": [
+                "consume",
+                "produce"
+              ],
+              "admin,lx": [
+                "consume",
+                "produce"
+              ]
+            },
+            "leaf": false,
+            "title": "persistent://lx/java/testN1",
+            "value": "persistent://lx/java/testN1",
+            "key": "persistent://lx/java/testN1"
+          },
+          {
+            "children": [
+              {
+                "leaf": true,
+                "title": "persistent://lx/java/testN-partition-0",
+                "value": "persistent://lx/java/testN-partition-0",
+                "key": "persistent://lx/java/testN-partition-0"
+              },
+              {
+                "leaf": true,
+                "title": "persistent://lx/java/testN-partition-1",
+                "value": "persistent://lx/java/testN-partition-1",
+                "key": "persistent://lx/java/testN-partition-1"
+              },
+              {
+                "leaf": true,
+                "title": "persistent://lx/java/testN-partition-2",
+                "value": "persistent://lx/java/testN-partition-2",
+                "key": "persistent://lx/java/testN-partition-2"
+              },
+              {
+                "leaf": true,
+                "title": "persistent://lx/java/testN-partition-3",
+                "value": "persistent://lx/java/testN-partition-3",
+                "key": "persistent://lx/java/testN-partition-3"
+              },
+              {
+                "leaf": true,
+                "title": "persistent://lx/java/testN-partition-4",
+                "value": "persistent://lx/java/testN-partition-4",
+                "key": "persistent://lx/java/testN-partition-4"
+              }
+            ],
+            "admin": {
+              "public": [
+                "consume",
+                "produce"
+              ],
+              "admin,lx": [
+                "consume",
+                "produce"
+              ],
+              "zx": [
+                "produce"
+              ]
+            },
+            "leaf": false,
+            "title": "persistent://lx/java/testN",
+            "value": "persistent://lx/java/testN",
+            "key": "persistent://lx/java/testN"
+          }
+        ],
+        "admin": {
+          "public": [
+            "consume",
+            "produce"
+          ],
+          "admin,lx": [
+            "consume",
+            "produce"
+          ]
+        },
+        "leaf": false,
+        "title": "lx/java",
+        "value": "lx/java",
+        "key": "lx/java"
+      }
+    ],
+    "admin": {
+      "public": [
+        "pulsar-cluster-1"
+      ],
+      "lx": [
+        "pulsar-cluster-1"
+      ],
+      "admin": [
+        "pulsar-cluster-1"
+      ]
+    },
+    "leaf": false,
+    "title": "lx",
+    "value": "lx",
+    "key": "lx"
+  },
+  {
+    "children": [],
+    "admin": {},
+    "leaf": false,
+    "title": "public",
+    "value": "public",
+    "key": "public"
+  }
+]
