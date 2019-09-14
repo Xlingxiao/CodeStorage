@@ -72,7 +72,7 @@ public class DataFactory {
      * @param eachLineCount 每行多少数
      * @param lineCount 总共多少行
      * @param path 输出到什么位置
-     * @throws IOException 文件输入输出异常
+     * @throws IOException 文件输。入输出异常
      */
     public void generatorToFile(int min, int max, int eachLineCount, int lineCount, String path) throws IOException {
         FileOutputStream fos = new FileOutputStream(path);
