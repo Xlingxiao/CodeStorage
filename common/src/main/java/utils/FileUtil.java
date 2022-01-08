@@ -1,6 +1,7 @@
 package utils;
 
 import org.junit.jupiter.api.Test;
+import org.testng.annotations.AfterTest;
 
 import java.io.*;
 import java.util.HashMap;

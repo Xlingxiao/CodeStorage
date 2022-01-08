@@ -1,6 +1,5 @@
 package utils;
 
-import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,7 +18,7 @@ public class DateUtil {
     private static final SimpleDateFormat sdfSecond = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
-    @Test
+
     void main() throws ParseException {
         String dateString = "2010-01-01 00:00";
         Date date2000 = stringToDate(dateString);

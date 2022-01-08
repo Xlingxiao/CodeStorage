@@ -1,7 +1,7 @@
 package sort.QuickSort;
 
-import org.junit.jupiter.api.Test;
 import factory.DataFactory;
+import org.junit.Test;
 
 public class QuickSort {
     @Test
