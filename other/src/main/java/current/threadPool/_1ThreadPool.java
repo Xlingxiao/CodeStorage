@@ -6,11 +6,24 @@ import java.util.concurrent.*;
 
 /**
  * 这里演示一个基本线程池创建的方法，和创建线程池相关的参数
+ *
+ * 执行示例可以看到：
+ * 1. 线程池处理任务时先创建核心池大小的线程处理任务
+ * 2. 核心池满了之后任务全部入队
+ * 3. 队列满了之后判断是否可以创建线程池：判断当前线程数是否大于最大线程数量
+ * 4. 不大于最大线程数就创建新线程处理新来的任务（注意：这里不是处理在队列中的旧任务）
+ * 5. 大于等于最大线程数，执行拒绝策略
  */
 public class _1ThreadPool {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         _1ThreadPool Demo = new _1ThreadPool();
-        ExecutorService threadPool = Demo.getExecutorService(2, 5, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<>(10), new ThreadPoolExecutor.AbortPolicy());
+        ExecutorService threadPool = Demo.getExecutorService(1, 2, 30, TimeUnit.SECONDS, new ArrayBlockingQueue<>(10), new ThreadPoolExecutor.AbortPolicy());
+        int taskCount = 100;
+        for (int i = 0; i < taskCount; i++) {
+            Task task = new Task(i);
+            threadPool.submit(task);
+        }
+        System.out.println("任务提交完毕");
     }
 
     /**
